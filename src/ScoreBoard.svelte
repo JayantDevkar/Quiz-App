@@ -1,44 +1,101 @@
+
+
 <script>
+      import {Card, CardText,Row, Button} from 'svelte-materialify';
     export let user ={}
-    export let gameDetails;
+    export let attempts;
+    let count = 0
+    async function get_scores(){   
+        const db_res = await fetch(`http://localhost:5000/api/get/scores?uuid=${user.uuid}`)
+        const feed = await db_res.json();
+        if (db_res.ok){
+			attempts = feed
+		}
+    }
+    function log_attmp(attempts){
+        if(attempts){
+            console.log(Object.keys(attempts).length)
+            attempts.map((x)=>{
+            console.log("Key" , x, typeof x,"keys of x", Object.keys(x) )
+        })
+        }
+    }
+    $:log_attmp(attempts)
+
 </script>
 
-{#if user.score}
-<div class="primary-text">
-    <h2>Score:
-        <div class="sbText">
-            10/100
-        </div>
-    </h2>
-    <h2>Level Played:
-        <div class="sbText">
-            Hard
-        </div>
-    </h2>
-    <h2>Time Taken Per Question:
-        <div class="sbText">
-            3 sec
-        </div>
+{#if attempts}
+<div class="head">
+    <h2>
+        Score : {user.score} Out of {attempts.length}
     </h2>
 </div>
+{#each attempts as attmp}
+<div class="d-flex justify-center mt-4 mb-4">
+    <div class="card-padding">
+        <Card shaped raised style="width:600px;">
+            <div class="pl-4 pr-4 pt-3">
+                <div class="card-question">
+                  <span class="primary-text">Q : {attmp.asked.replace(/['"]+/g, '')}</span>
+                </div>
+              <br />
+            </div>
+            <CardText>
+              <Row>
+                  {#if !attmp.isCorrect}
+                  <div class="card-score">
+                    <span class="red-text">You answered: {attmp.answered.replace(/['"]+/g, '')}</span>
+                    <br/>
+                    <br/>
+                    <span class="green-text">Correct Answer: {attmp.correct.replace(/['"]+/g, '')}</span>
+                  </div>
+                  {:else}
+                  <div class="card-score">
+                    <span class="green-text">Correct Answer: {attmp.answered.replace(/['"]+/g, '')}</span>
+                  </div>
+                  {/if}
+              </Row>
+            </CardText>
+            <!-- <script>count+=1</script> -->
+          </Card>
+    </div>
+</div>
+{/each}
 {:else}
-<div class="primary-text">
-<h2>No score to display. Take a quiz to see score board.</h2>
+<div  class="SubmitButton">
+    <Button rounded class="primary-color" size="x-large" on:click={()=>{get_scores()}} >Get Score Board</Button>
 </div>
 {/if}
 
+
 <style>
-    .sbText{
-        color: white;
-        font-weight: bold;
-    }
-    h2 {
-    padding: 3%;
+        h2 {
     font-size: 3em;
-    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-    font-weight: 100;
-    color: rgb(#0d1821);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    /* font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+    /* font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+      "Lucida Sans Unicode", Geneva, Verdana, sans-serif; */
+    font-weight: medium;
 	text-align: center;
   }
+    .card-padding{
+        padding: 2%;
+        justify-self: center;
+
+    }
+    .SubmitButton{
+		justify-self: center;
+    }
+    .card-question{
+        font-weight: medium;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-size: 210%;
+    }
+    .card-score{
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        text-align: left;
+        font-size: 180%;
+        padding: 2%;
+    }
+
 </style>

@@ -5,11 +5,33 @@
 	import UserForm from "./UserDetailForm.svelte"
     let value = 0; //variable to keep track of values
     let user ={}; 
+	let attempts;
+	function setScreen(number){
+		if (number){
+			console.log("THE Fnumbrsce",attempts)
+			value = number
+			delete user['screenNumber']
+		}
+	}
+	function setFeedBack(feed){
+		if(feed){
+			attempts=feed
+			console.log("THE FEEED BACK BOLTE",typeof Object.values(attempts), Object.values(attempts))
+			delete user['feedback']
+		}
+	}
+	$: firstHeading = !user.isSet? "Player Details" : "Quiz"
+	$: setFeedBack(user['feedback'])
+	$: setScreen(user['screenNumber'])
+
 	user['uuid'] = uuidv4()
+	user['isNew'] = true
+	console.log("Initial set user id",user['uuid'])
     function setUser(usr){
+		console.log("Setting User",user)
         user=usr
     }
-	$:console.log(user)
+	$:console.log("user",user)
   </script>
 
 	<MaterialApp theme="dark">
@@ -21,7 +43,7 @@
 				<div slot="extension">
 				<Tabs bind:value fixedTabs>
 				  <div class="primary-text text-accent-1"  slot="tabs">
-						<Tab>Player Details</Tab>
+					  <Tab>{firstHeading}</Tab>
 						<Tab>Score Board</Tab>
 						<Tab>Leader Board</Tab>
 						<Tab>About The Quiz</Tab>
@@ -39,15 +61,12 @@
 			  </WindowItem>
 			  <WindowItem>
 				<div class="darkbg">
-					<ScoreBoard {user}/>
+					<ScoreBoard {user} {attempts}/>
 				</div>
 			  </WindowItem>
 			  <WindowItem>
 				<h4>Leader Board</h4>
-				<p>
-				  
-				  
-				</p>
+				 <!-- <QuizPage/> -->
 			  </WindowItem>
 			  <WindowItem>
 				<h4>What is this is Quiz About?</h4>
@@ -64,7 +83,7 @@
 	:global(.dark) {
 		background: #010b13;
 	}
-	
+
       .title{
       text-align: center;
       color: #010b13;

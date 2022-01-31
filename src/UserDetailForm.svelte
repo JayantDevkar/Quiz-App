@@ -1,31 +1,54 @@
 <script>
   import {Radio, Alert,Icon, Button,TextField, Row, Col, MaterialApp } from 'svelte-materialify';
   import {v4 as uuidv4} from "uuid"
-  
   export let user = {};
-    export let setUser;
+  export let setUser;
+  import QuizPage from "./QuizPage.svelte"
+
     let name;
     let level //variable to store difficulty
     let numberQ = 1
     let alert = false;
     let isUserSet = false
+    // $: sendUserDetail(user)
+
     function onDismiss() { //function to dimiss alert
         alert = false;
     }
-    const handleSubmiUser = (isNew=false)=>{
+    const setUserState= (state=false, feedback=false) =>{
+        user['isSet'] = state
+        if(feedback){
+            console.log("The seeter", typeof feedback.feedBack, feedback)
+            user['feedback'] = feedback.feedBack
+            user['score'] = feedback.score
+        }
+        if(!state){
+            user['screenNumber'] = 1
+        }
+        setUser(user)
+        isUserSet = state
+    }
+    function handleSubmiUser (isNew=false){
         console.log(level,name)
         if (name && name.length>0 && level>0 ){
              //uuid to replace session. insecure, a scalable solution will require reddis-server.
             if(isNew){
+                user['isNew'] = true
                 user['uuid'] = uuidv4()
+                console.log("New idd",user['uuid'])
+            }else{
+                if(isNew != "first"){
+                    user['isNew'] = false
+                }
             }
-             user['name'] = name
+            user['name'] = name
             user['level'] = level
             user['numberQ'] = numberQ
-            user['score'] = 69
-            // console.log(user)
             alert = false;
             isUserSet = true
+            user['isSet'] = true
+            console.log("the user after submit =",user,isUserSet)
+            // QuizPages = get_QuizPages()
             setUser(user)
         }else{
             alert = true; 
@@ -33,8 +56,6 @@
     }
     
 </script>
-
-<div class="grad">
 
     {#if alert}
     <div class="alert">
@@ -44,15 +65,19 @@
           <!-- could make more specific alerts but there are only two input feilds so user should find it easy -->
     </div>
     {/if}
+    {#if isUserSet}
+        <QuizPage {setUserState} {user}/>
+    {:else}
     <Row>
         <h2>
             <div class="FormHeadings">
-            Player Name:
+                <div class="top-spacing">
+                    Player Name:
+                </div>
             </div>
         </h2>
         <div class="FormValues">
-            <TextField bind:value={name} dense>
-            </TextField>
+                <input type="text" class="inText" bind:value={name} >
         </div>
         <br />
     </Row>
@@ -98,61 +123,59 @@
             
     </Row>
     <Row>
-        {#if isUserSet}
+        {#if user.name}
         <div class="SubmitButton2">
-            <Button class="primary-color" size="x-large" on:click={()=>{handleSubmiUser}} >Play as same player</Button>
+            <Button rounded class="primary-color" size="x-large" on:click={()=>{handleSubmiUser(false)}} >Play as same player</Button>
         </div>
         <div class="SubmitButton3">
-            <Button class="primary-color" size="x-large" on:click={()=>{handleSubmiUser(true)}} >Submit New Player</Button>
+            <Button rounded class="primary-color" size="x-large" on:click={()=>{handleSubmiUser(true)}} >Submit New Player</Button>
         </div>
-    {:else}
-    <div class="SubmitButton">
-        <Button class="primary-color" size="x-large" on:click={handleSubmiUser} >Start Quiz</Button>
-    </div>
+        {:else}
+        <div  class="SubmitButton">
+            <Button rounded class="primary-color" size="x-large" on:click={()=>{handleSubmiUser("first")}} >Start Quiz</Button>
+        </div>
         {/if}
     </Row>    
-</div>
+    {/if}
+    
 
 
 
 <style>
-    .grad{
-        /* background-color: #010b13;
-		  height: 100%;
-		  width: 100%; */
-    }
     .FormHeadings{
         padding-top: 6%;
         padding-left: 20px;
         color: #6200EA;
         /* font-weight: ; */
     }
-
+    .top-spacing{
+        padding-top: 18%;
+    }
     .SubmitButton{
         justify-self: center;
         padding-left: 45%;
-        padding-top: 10%;
-        
+        padding-top: 7%;
     }
     .SubmitButton2{
         justify-self: center;
         padding-left: 30%;
-        padding-top: 10%; 
+        padding-top: 7%; 
     }
     .SubmitButton3{
         justify-self: center;
         padding-left: 5%;
-        padding-top: 10%; 
+        padding-top: 7%; 
     }
     .FormValues {
         padding: 2%;
+        padding-top: 5%;
         width: 50%;
     }
     .FormValues2 {
         padding: 5%;
-        padding-top: 7.5%;
+        padding-top: 7%;
         width: 60%;
-        font-size: large;
+        font-size: x-large;
     }
     .FormValues3 {
         padding-left: 5%;
@@ -162,18 +185,23 @@
         padding-left: 2%;
         padding-top: 5.7%;
     }
+    .inText{
+        font-size: x-large;
+        color: #FFFFFF;
+        background-color: rgb(36, 34, 34);
+        text-align: center;
+    }
     h2 {
     font-size: 3em;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     /* font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
     /* font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
       "Lucida Sans Unicode", Geneva, Verdana, sans-serif; */
-    font-weight: bolder;
-    color: rgb(#0d1821);
+    font-weight: medium;
 	text-align: center;
   }
  input{
-     accent-color:#6200EA ;
+     accent-color:#6200EA ;  
  }
 
  .alert{
