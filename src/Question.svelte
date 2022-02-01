@@ -11,7 +11,7 @@
         <Card shaped raised style="width:800px;">
           <div class="pl-4 pr-4 pt-3">
               <div class="card-question">
-                <span class="primary-text">{(JSON.stringify(question.ask)).replace(/['"]+/g, '')}</span>
+                <span class="primary-text">{(JSON.stringify(question.ask)).replace(/["]+/g, '')}</span>
               </div>
             <br />
           </div>

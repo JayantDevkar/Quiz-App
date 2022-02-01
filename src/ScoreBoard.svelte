@@ -6,7 +6,7 @@
     export let attempts;
     let count = 0
     async function get_scores(){   
-        const db_res = await fetch(`http://localhost:5000/api/get/scores?uuid=${user.uuid}`)
+        const db_res = await fetch(`https://whispering-tor-80065.herokuapp.com/api/get/scores?uuid=${user.uuid.toString()}`)
         const feed = await db_res.json();
         if (db_res.ok){
 			attempts = feed
@@ -62,9 +62,11 @@
 </div>
 {/each}
 {:else}
-<div  class="SubmitButton">
-    <Button rounded class="primary-color" size="x-large" on:click={()=>{get_scores()}} >Get Score Board</Button>
-</div>
+<h3>
+    <span class="red-text">
+        No score to show. Please take the quiz first.
+    </span>
+</h3>
 {/if}
 
 
@@ -78,12 +80,22 @@
     font-weight: medium;
 	text-align: center;
   }
+  h3 {
+    font-size: 3em;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    /* font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+    /* font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+      "Lucida Sans Unicode", Geneva, Verdana, sans-serif; */
+    font-weight: medium;
+	text-align: left;
+  }
     .card-padding{
         padding: 2%;
         justify-self: center;
-
     }
     .SubmitButton{
+        padding-left: 35%;
+        padding-top: 10%;
 		justify-self: center;
     }
     .card-question{

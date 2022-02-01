@@ -3,6 +3,7 @@
 	import {v4 as uuidv4} from "uuid"
 	import ScoreBoard from "./ScoreBoard.svelte"
 	import UserForm from "./UserDetailForm.svelte"
+	import LeaderBoard from "./LeaderBoard.svelte"
     let value = 0; //variable to keep track of values
     let user ={}; 
 	let attempts;
@@ -29,6 +30,9 @@
 	console.log("Initial set user id",user['uuid'])
     function setUser(usr){
 		console.log("Setting User",user)
+		if(!user.score){
+			attempts = undefined
+		}
         user=usr
     }
 	$:console.log("user",user)
@@ -65,14 +69,18 @@
 				</div>
 			  </WindowItem>
 			  <WindowItem>
-				<h4>Leader Board</h4>
+				<LeaderBoard {user}/>
 				 <!-- <QuizPage/> -->
 			  </WindowItem>
 			  <WindowItem>
-				<h4>What is this is Quiz About?</h4>
-				<p>
-				  This is a silly quiz app that asks questions about Jay Devkar and then gives out a score out of 100.
-				</p>
+				<h3>What is this is Quiz About?</h3>
+				<h3>
+					<p>
+						<span class="primary-text">
+							This is a silly quiz app that asks questions about Jay Devkar and then gives out a score.
+						</span>
+					  </p>
+					</h3>
 			  </WindowItem>
 			</Window>
 		</div>
@@ -89,6 +97,12 @@
       color: #010b13;
       font-size: 50px;
       }
+	  h3{
+		font-size: 2em;
+		font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+		font-weight: 100;
+		text-align: left;
+	  }
   
       h2 {
       font-size: 1em;

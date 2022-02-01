@@ -35,6 +35,7 @@
             if(isNew){
                 user['isNew'] = true
                 user['uuid'] = uuidv4()
+                delete user['score']
                 console.log("New idd",user['uuid'])
             }else{
                 if(isNew != "first"){
@@ -188,7 +189,7 @@
     .inText{
         font-size: x-large;
         color: #FFFFFF;
-        background-color: rgb(36, 34, 34);
+        background-color: rgb(47, 43, 43);
         text-align: center;
     }
     h2 {
