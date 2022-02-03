@@ -5,7 +5,7 @@ https://kind-liskov-38b895.netlify.app/
 My friends don't stay updated on me becuase I don't post on social media.
 
 ## Solution
-Created a quiz that will not only test their knowledge about me but also update them about me. (a lil narcissistic, ik :} ) 
+Created a quiz that will not only test their knowledge about me but also update them about me. (lil narcissistic, ik :} ) 
 
 ## Stack 
 It's a full stack app. 
