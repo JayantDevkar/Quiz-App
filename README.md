@@ -1,4 +1,4 @@
-# Quiz-App
+# J-Quiz App
 https://kind-liskov-38b895.netlify.app/ 
 
 ## Problem
@@ -18,7 +18,7 @@ It's a full stack app.
 - App doesn't have user authentication or sessions/cookies (so if you refresh the user is gone!)
 - No way for users to suggest questions or answers.
 - Not showing stats like : how many people choose the same options as user and other cool metrics.
-- I could have used know FE framework and made the app look more fancy.
+- I could have used known FE framework and made the app look more fancy.
 
 ## Backend 
 https://github.com/JayantDevkar/svelte-app-backend
