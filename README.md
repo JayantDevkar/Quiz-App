@@ -15,6 +15,7 @@ It's a full stack app.
   - I came across Svelte and it seemed very intresting to me so I used it for creating the quiz app so I can practice.
  
 ## Trade-Offs
+- App doesn't support all screen sizes only big screens (laptop full-screen). CSS needs to be updated to support mobile screens.
 - App doesn't have user authentication or sessions/cookies (so if you refresh the user is gone!)
 - No way for users to suggest questions or answers.
 - Not showing stats like : how many people choose the same options as user and other cool metrics.
